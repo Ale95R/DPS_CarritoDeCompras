@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Desserts Shop</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #fffaf7; }
+    header {
+      background: #ff7f50; color: #fff; padding: 15px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    header h1 { margin: 0; font-size: 24px; }
+    .search-login { display: flex; align-items: center; gap: 10px; }
+    .search-login input { padding: 6px 10px; border-radius: 5px; border: none; outline: none; font-size: 14px; }
+    .search-login button { padding: 6px 12px; border: none; border-radius: 5px; background: #333; color: #fff; cursor: pointer; }
+    .search-login button:hover { background: #222; }
+
+    /* Layout */
+    main { display: flex; justify-content: space-between; padding: 20px; gap: 20px; }
+    .products {
+      width: 60%;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .product {
+      border: 1px solid #ddd; border-radius: 10px; padding: 10px; text-align: center;
+      background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .product img { max-width: 100%; height: auto; border-radius: 8px; }
+    .product input[type="number"] { width: 70px; padding: 6px; border: 1px solid #ccc; border-radius: 6px; }
+
+    /* Sidebar (Carrito + Factura) */
+    .sidebar { width: 40%; display: flex; flex-direction: column; }
+    .cart, .invoice {
+      width: 100%; border: 2px solid #333; border-radius: 10px; padding: 15px;
+      background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px;
+    }
+    .cart h2, .invoice h2 { margin: 0 0 10px 0; }
+    .cart ul, .invoice ul { list-style: none; padding: 0; margin: 0; }
+    .cart li, .invoice li {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; margin: 8px 0; font-size: 14px;
+    }
+    .cart img, .invoice img { width: 80px; height: 70px; object-fit: cover; border-radius: 6px; }
+    .item-info { flex: 1; }
+    .total { margin-top: 15px; font-weight: bold; font-size: 16px; }
+    button { margin-top: 10px; padding: 8px 12px; border: none; background: #ff7f50; color: #fff; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #ff4500; }
+
+    /* Responsive simple */
+    @media (max-width: 900px) {
+      main { flex-direction: column; }
+      .products, .sidebar { width: 100%; }
+      .products { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .products { grid-template-columns: 1fr; }
+      .cart img, .invoice img { width: 60px; height: 50px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Banner -->
+  <header>
+    <h1>Desserts Shop 🍰</h1>
+    <div class="search-login">
+      <input type="text" id="search" placeholder="Buscar postre..." />
+      <button onclick="login()">Iniciar sesión</button>
+    </div>
+  </header>
+
+  <!-- Contenido -->
+  <main>
+    <!-- Productos -->
+    <div class="products" id="product-list"></div>
+
+    <!-- Carrito + Factura -->
+    <div class="sidebar">
+      <div class="cart">
+        <h2>Carrito</h2>
+        <ul id="cart-items"></ul>
+        <p class="total">Total: $<span id="cart-total">0.00</span></p>
+        <button onclick="checkout()">Comprar</button>
+      </div>
+
+      <div class="invoice" id="invoice" style="display:none;">
+        <h2>Factura 🧾</h2>
+        <ul id="invoice-items"></ul>
+        <p>Subtotal: $<span id="invoice-subtotal">0.00</span></p>
+        <p>IVA (13%): $<span id="invoice-tax">0.00</span></p>
+        <p class="total">Total: $<span id="invoice-total">0.00</span></p>
+        <button onclick="continueShopping()">Seguir comprando</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Productos originales con tus rutas locales + stock
+    const products = [
+      { id: 1, name: "Pistachio Baklava", price: 4.00,  stock: 10, img: "assets/images/image-baklava-desktop.jpg" },
+      { id: 2, name: "Waffle with Berries", price: 6.50, stock: 8,  img: "assets/images/image-waffle-desktop.jpg" },
+      { id: 3, name: "Vanilla Bean Crème Brûlée", price: 7.00, stock: 5,  img: "assets/images/image-creme-brulee-desktop.jpg" },
+      { id: 4, name: "Macaron", price: 8.00,                     stock: 12, img: "assets/images/image-macaron-desktop.jpg" },
+      { id: 5, name: "Classic Tiramisu", price: 5.50,            stock: 9,  img: "assets/images/image-tiramisu-desktop.jpg" },
+      { id: 6, name: "Meringue Pie", price: 5.00,                stock: 7,  img: "assets/images/image-meringue-desktop.jpg" },
+      { id: 7, name: "Cake", price: 4.50,                        stock: 6,  img: "assets/images/image-cake-desktop.jpg" },
+      { id: 8, name: "Salted Caramel Brownie", price: 5.50,      stock: 10, img: "assets/images/image-brownie-desktop.jpg" },
+      { id: 9, name: "Vanilla Panna Cotta", price: 6.50,         stock: 8,  img: "assets/images/image-panna-cotta-desktop.jpg" }
+    ];
+
+    let cart = [];
+
+    const productList = document.getElementById("product-list");
+
+    // Render de productos
+    function renderProducts(filter = "") {
+      productList.innerHTML = "";
+      products
+        .filter(p => p.name.toLowerCase().includes(filter.toLowerCase()))
+        .forEach(product => {
+          const div = document.createElement("div");
+          div.classList.add("product");
+          div.innerHTML = `
+            <img src="${product.img}" alt="${product.name}">
+            <h3>${product.name}</h3>
+            <p><b>Precio:</b> $${product.price.toFixed(2)}</p>
+            <p><b>Stock:</b> ${product.stock}</p>
+            <input type="number" id="qty-${product.id}" min="1" max="${product.stock}" value="1">
+            <button onclick="addToCart(${product.id})">Agregar</button>
+          `;
+          productList.appendChild(div);
+        });
+    }
+    renderProducts();
+
+    // Búsqueda
+    document.getElementById("search").addEventListener("input", (e) => {
+      renderProducts(e.target.value);
+    });
+
+    // Agregar al carrito (con validaciones e inventario)
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      const qtyInput = document.getElementById("qty-" + id);
+      const quantity = parseInt(qtyInput.value);
+
+      if (isNaN(quantity) || quantity <= 0) {
+        alert("Cantidad inválida.");
+        return;
+      }
+      if (quantity > product.stock) {
+        alert("No hay suficiente stock disponible.");
+        return;
+      }
+
+      const item = cart.find(i => i.id === id);
+      if (item) {
+        // Aquí solo validamos contra el stock restante
+        if (quantity > product.stock) {
+          alert("No puedes agregar más de lo disponible.");
+          return;
+        }
+        item.quantity += quantity;
+      } else {
+        cart.push({ id: product.id, name: product.name, price: product.price, img: product.img, quantity });
+      }
+
+      // Descontar del inventario
+      product.stock -= quantity;
+
+      renderProducts(document.getElementById("search").value || "");
+      renderCart();
+    }
+
+    // Render del carrito (con fotos)
+    function renderCart() {
+      const cartItems = document.getElementById("cart-items");
+      const cartTotal = document.getElementById("cart-total");
+      cartItems.innerHTML = "";
+
+      let total = 0;
+      cart.forEach(item => {
+        const lineTotal = item.price * item.quantity;
+        total += lineTotal;
+
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <img src="${item.img}" alt="${item.name}">
+          <div class="item-info">
+            <strong>${item.name}</strong><br>
+            Cant: ${item.quantity} × $${item.price.toFixed(2)} = $${lineTotal.toFixed(2)}
+          </div>
+          <button onclick="removeFromCart(${item.id})">❌</button>
+        `;
+        cartItems.appendChild(li);
+      });
+
+      cartTotal.textContent = total.toFixed(2);
+    }
+
+    // Quitar producto del carrito (regresa al inventario)
+    function removeFromCart(id) {
+      const item = cart.find(i => i.id === id);
+      if (item) {
+        const product = products.find(p => p.id === id);
+        product.stock += item.quantity; // devolver inventario
+      }
+      cart = cart.filter(i => i.id !== id);
+      renderProducts(document.getElementById("search").value || "");
+      renderCart();
+    }
+
+    // Facturación
+    function checkout() {
+      if (cart.length === 0) {
+        alert("Tu carrito está vacío 🛒");
+        return;
+      }
+
+      const invoice = document.getElementById("invoice");
+      const invoiceItems = document.getElementById("invoice-items");
+      const invoiceSubtotal = document.getElementById("invoice-subtotal");
+      const invoiceTax = document.getElementById("invoice-tax");
+      const invoiceTotal = document.getElementById("invoice-total");
+
+      invoiceItems.innerHTML = "";
+      let subtotal = 0;
+
+      cart.forEach(item => {
+        const line = item.price * item.quantity;
+        subtotal += line;
+
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <img src="${item.img}" alt="${item.name}">
+          <div class="item-info">
+            ${item.name} — ${item.quantity} × $${item.price.toFixed(2)} = $${line.toFixed(2)}
+          </div>
+        `;
+        invoiceItems.appendChild(li);
+      });
+
+      const tax = subtotal * 0.13;
+      const total = subtotal + tax;
+
+      invoiceSubtotal.textContent = subtotal.toFixed(2);
+      invoiceTax.textContent = tax.toFixed(2);
+      invoiceTotal.textContent = total.toFixed(2);
+
+      invoice.style.display = "block";
+
+      // Vaciar carrito después de generar factura
+      cart = [];
+      renderCart();
+    }
+
+    // Seguir comprando
+    function continueShopping() {
+      document.getElementById("invoice").style.display = "none";
+    }
+
+    // Login simulado
+    function login() { alert("Función de inicio de sesión próximamente 🔐"); }
+  </script>
+</body>
+</html>
