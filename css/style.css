@@ -76,7 +76,7 @@ main {
   align-items: start;
 }
 
-.grid {
+<<<<<<< HEAD .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
@@ -120,8 +120,63 @@ main {
   border: 1px solid #ccc;
   border-radius: 10px;
 }
+======= .grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.card .pad {
+  padding: 14px;
+}
+.product__img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+}
 
-aside {
+/* 👇 Efecto hover agregado */
+.product__img {
+  transition: transform 0.3s ease-in-out; /* animación suave */
+  cursor: pointer;
+}
+.product__img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* resalta un poco */
+}
+/* ☝️ si no quieres la sombra, borra la línea del box-shadow */
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.price {
+  font-weight: 700;
+}
+.muted {
+  color: var(--muted);
+}
+.qty {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.qty input {
+  width: 80px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+>>>>>>>a99cdd5ff8afb1c228d376986acff35d74d965bf aside {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -182,6 +237,37 @@ footer {
   border-top: 1px solid var(--border);
   color: var(--muted, #6b7280);
   width: 100%;
+}
+
+ul.clean {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.cart-li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.cart-li:last-child {
+  border-bottom: 0;
+}
+.thumb {
+  width: 72px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.cart-meta {
+  font-size: 14px;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 /* ==========
