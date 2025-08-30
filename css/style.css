@@ -19,6 +19,18 @@ main{display:grid;grid-template-columns:1.2fr .8fr;gap:22px;padding:22px;align-i
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
 .card .pad{padding:14px}
 .product__img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+
+/* 👇 Efecto hover agregado */
+.product__img {
+  transition: transform 0.3s ease-in-out; /* animación suave */
+  cursor: pointer;
+}
+.product__img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(0,0,0,.2); /* resalta un poco */
+}
+/* ☝️ si no quieres la sombra, borra la línea del box-shadow */
+
 .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .price{font-weight:700}
 .muted{color:var(--muted)}
@@ -36,4 +48,3 @@ ul.clean{list-style:none;margin:0;padding:0}
 .thumb{width:72px;height:60px;border-radius:8px;object-fit:cover}
 .cart-meta{font-size:14px}
 .actions{display:flex;align-items:center;gap:6px}
-.bt
