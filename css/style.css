@@ -76,7 +76,7 @@ main {
   align-items: start;
 }
 
-<<<<<<< HEAD .grid {
+.grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
@@ -120,7 +120,8 @@ main {
   border: 1px solid #ccc;
   border-radius: 10px;
 }
-======= .grid {
+
+.grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
@@ -142,16 +143,14 @@ main {
   display: block;
 }
 
-/* 👇 Efecto hover agregado */
 .product__img {
-  transition: transform 0.3s ease-in-out; /* animación suave */
+  transition: transform 0.3s ease-in-out;
   cursor: pointer;
 }
 .product__img:hover {
   transform: scale(1.1);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* resalta un poco */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
-/* ☝️ si no quieres la sombra, borra la línea del box-shadow */
 
 .row {
   display: flex;
@@ -176,7 +175,8 @@ main {
   border: 1px solid #ccc;
   border-radius: 10px;
 }
->>>>>>>a99cdd5ff8afb1c228d376986acff35d74d965bf aside {
+
+aside {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -290,5 +290,19 @@ ul.clean {
   .grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 25px;
+  }
+}
+
+@media (max-width: 486px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    text-align: center;
+    gap: 10px;
   }
 }
