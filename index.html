@@ -1,74 +1,101 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Desserts Shop</title>
-  <meta name="description" content="Carrito de compras con HTML, CSS y JavaScript. Guarda el carrito en localStorage y genera factura con IVA del 13% (El Salvador)."/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Desserts Shop</title>
+    <meta
+      name="description"
+      content="Carrito de compras con HTML, CSS y JavaScript. Guarda el carrito en localStorage y genera factura con IVA del 13% (El Salvador)."
+    />
 
-  <!-- Estilos -->
-  <link rel="stylesheet" href="css/style.css">
+    <!-- Estilos -->
+    <link rel="stylesheet" href="css/style.css" />
 
-  <!-- SweetAlert2 (notificaciones bonitas) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-<body>
-  <header>
-    <h1>Desserts Shop 🍰</h1>
-    <div class="search-login">
-      <label for="search" class="visually-hidden" aria-hidden="true">Buscar</label>
-      <input id="search" type="search" placeholder="Buscar postre…" autocomplete="off" />
-      <button class="btn" id="loginBtn" type="button">Iniciar sesión</button>
-    </div>
-  </header>
-
-  <main>
-    <section>
-      <div class="row" style="margin-bottom:10px">
-        <p class="muted" id="resultsMsg">Mostrando todos los productos</p>
-        <button class="btn" id="resetBtn" type="button">Limpiar filtro</button>
+    <!-- SweetAlert2 (notificaciones bonitas) -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+    />
+    <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Desserts Shop 🍰</h1>
+      <div class="search-login">
+        <label for="search" class="visually-hidden" aria-hidden="true"
+          >Buscar</label
+        >
+        <input
+          id="search"
+          type="search"
+          placeholder="Buscar postre…"
+          autocomplete="off"
+        />
+        <button class="btn" id="loginBtn" type="button">Iniciar sesión</button>
       </div>
-      <div id="product-list" class="grid" aria-live="polite"></div>
-    </section>
+    </header>
 
-    <aside>
-      <section class="panel" aria-live="polite" aria-busy="false">
-        <h2>Carrito</h2>
-        <div class="body">
-          <ul id="cart-items" class="clean"></ul>
-          <div id="cart-empty" class="empty" style="display:none">Tu carrito está vacío 🛒</div>
-          <div class="total"><span>Total</span><span id="cart-total">$0.00</span></div>
-          <div class="row" style="margin-top:10px">
-            <button class="btn" id="clearBtn" type="button">Vaciar</button>
-            <button class="btn primary" id="checkoutBtn" type="button">Comprar</button>
-          </div>
+    <main>
+      <section>
+        <div class="row" style="margin-bottom: 10px">
+          <p class="muted" id="resultsMsg">Todos los productos</p>
+          <button class="btn" id="resetBtn" type="button">
+            Limpiar filtro
+          </button>
         </div>
+        <div id="product-list" class="grid" aria-live="polite"></div>
       </section>
 
-      <section id="invoice" class="panel" style="display:none">
-        <h2>Factura 🧾</h2>
-        <div class="body">
-          <ul id="invoice-items" class="clean"></ul>
-          <div class="totals">
-            <p><span>Subtotal</span><span id="invoice-subtotal">$0.00</span></p>
-            <p><span>IVA (13%)</span><span id="invoice-tax">$0.00</span></p>
-            <p class="total"><span>Total</span><span id="invoice-total">$0.00</span></p>
+      <aside>
+        <section class="panel" aria-live="polite" aria-busy="false">
+          <h2>Carrito</h2>
+          <div class="body">
+            <ul id="cart-items" class="clean"></ul>
+            <div id="cart-empty" class="empty" style="display: none">
+              Tu carrito está vacío 🛒
+            </div>
+            <div class="total">
+              <span>Total</span><span id="cart-total">$0.00</span>
+            </div>
+            <div class="row" style="margin-top: 10px">
+              <button class="btn" id="clearBtn" type="button">Vaciar</button>
+              <button class="btn primary" id="checkoutBtn" type="button">
+                Comprar
+              </button>
+            </div>
           </div>
-          <button class="btn" id="continueBtn" type="button">Seguir comprando</button>
-        </div>
-      </section>
-    </aside>
-  </main>
+        </section>
 
-  <footer>
-    Hecho solo con HTML + CSS + JavaScript. Guarda el carrito en <code>localStorage</code>.
-  </footer>
+        <section id="invoice" class="panel" style="display: none">
+          <h2>Factura 🧾</h2>
+          <div class="body">
+            <ul id="invoice-items" class="clean"></ul>
+            <div class="totals">
+              <p>
+                <span>Subtotal</span><span id="invoice-subtotal">$0.00</span>
+              </p>
+              <p><span>IVA (13%)</span><span id="invoice-tax">$0.00</span></p>
+              <p class="total">
+                <span>Total</span><span id="invoice-total">$0.00</span>
+              </p>
+            </div>
+            <button class="btn" id="continueBtn" type="button">
+              Seguir comprando
+            </button>
+          </div>
+        </section>
+      </aside>
+    </main>
 
-  <!-- Lógica -->
-  <script src="js/main.js" defer
-          onload="console.log('main.js cargado OK')"
-          onerror="alert('ERROR: no se pudo cargar js/main.js (revisa ruta/nombre)')">
-  </script>
-</body>
+    <footer>Hecho solo con HTML + CSS + JavaScript.</footer>
+
+    <!-- Lógica -->
+    <script
+      src="js/main.js"
+      defer
+      onload="console.log('main.js cargado OK')"
+      onerror="alert('ERROR: no se pudo cargar js/main.js (revisa ruta/nombre)')"
+    ></script>
+  </body>
 </html>
