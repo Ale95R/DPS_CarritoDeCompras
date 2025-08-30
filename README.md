@@ -33,3 +33,6 @@ La tienda está enfocada en postres, pero puede adaptarse a cualquier producto.
 
 - **Vista catálogo de productos responsive**
 <img width="674" height="861" alt="image" src="https://github.com/user-attachments/assets/303df5d3-79ff-486f-9532-c52a60d30117" />
+
+El proyecto está publicado en GitHub Pages:  
+👉 [Ver Desserts Shop en línea](https://ale95r.github.io/DPS_CarritoDeCompras/)
