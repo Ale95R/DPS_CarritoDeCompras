@@ -39,3 +39,36 @@ La tienda está enfocada en postres, pero puede adaptarse a cualquier producto.
 - **Vista catálogo de productos responsive**
 <img width="674" height="861" alt="image" src="https://github.com/user-attachments/assets/303df5d3-79ff-486f-9532-c52a60d30117" />
 
+
+## 👀 Ver el proyecto
+
+### 🔄 Hacer un fork y clonar
+1. Haz clic en **Fork** (arriba a la derecha en GitHub) para copiar este repositorio a tu cuenta.  
+2. Copia la URL del repositorio (HTTPS o SSH) desde tu fork.  
+3. Clona el repositorio en tu computadora:
+
+```bash
+# Con HTTPS
+git clone https://github.com/TU_USUARIO/TU_REPO.git
+
+# Entrar en la carpeta
+cd TU_REPO
+
+### 💻 Abrir en Visual Studio Code
+
+1. Abre **Visual Studio Code**.  
+2. Ve a **File > Open Folder** y selecciona la carpeta del proyecto clonado.  
+3. Ubica el archivo `index.html`.  
+
+### 🌐 Ejecutar el proyecto
+
+**Opción 1 (rápida):**  
+Haz doble clic en `index.html` y se abrirá directamente en tu navegador.  
+
+**Opción 2 (recomendada):**  
+Usar la extensión **Live Server** en VS Code:  
+1. Instala la extensión *Live Server*.  
+2. Haz clic derecho en `index.html` → **Open with Live Server**.  
+3. El proyecto se abrirá en tu navegador en:  
+   👉 [http://localhost:5500](http://localhost:5500)  
+
