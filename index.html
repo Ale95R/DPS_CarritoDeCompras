@@ -8,6 +8,17 @@
       name="description"
       content="Carrito de compras con HTML, CSS y JavaScript. Guarda el carrito en localStorage y genera factura con IVA del 13% (El Salvador)."
     />
+    
+    <!-- PDF -->
+   <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"
+    ></script>
+
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"
+    ></script>
 
     <!-- Estilos -->
     <link rel="stylesheet" href="css/style.css" />
@@ -83,6 +94,11 @@
             <button class="btn" id="continueBtn" type="button">
               Seguir comprando
             </button>
+
+            <button class="btn" id="facturaBtn" type="button">
+              Descargar Factura
+            </button>
+
           </div>
         </section>
       </aside>

@@ -365,3 +365,81 @@ if (document.readyState === "loading") {
   renderProducts("");
   renderCart();
 }
+
+
+const btnFactura = document.getElementById("facturaBtn");
+
+ btnFactura.addEventListener("click", () => {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  const inv = JSON.parse(
+    localStorage.getItem("desserts_last_invoice") || "null"
+  );
+
+  // Encabezado
+  doc.setFontSize(16);
+  doc.text("Factura — Desserts Shop", 14, 16);
+  doc.setFontSize(10);
+  const fechaTxt = inv.when
+    ? new Date(inv.when).toLocaleString("es-SV")
+    : new Date().toLocaleString("es-SV");
+  doc.text(fechaTxt, 14, 22);
+
+  // Filas
+  const rows = inv.items.map((i) => [
+    i.name,
+    String(i.quantity),
+    fmt.format(i.price),
+    fmt.format(i.price * i.quantity),
+  ]);
+
+  // Tabla con autoTable (si está disponible)
+  let yAfter = 32;
+  if (doc.autoTable) {
+    doc.autoTable({
+      head: [["Producto", "Cant.", "Precio", "Total"]],
+      body: rows,
+      startY: 28,
+      styles: { fontSize: 10, cellPadding: 2 },
+      headStyles: { fillColor: [17, 24, 39], textColor: 255 },
+      columnStyles: {
+        1: { halign: "right" },
+        2: { halign: "right" },
+        3: { halign: "right" },
+      },
+    });
+    yAfter = doc.lastAutoTable.finalY + 8;
+  }  else {
+  // Sin autoTable
+  let y = 32;
+  doc.setFontSize(12);
+  doc.text("Detalle:", 14, 28);
+  rows.forEach((r) => {
+    const line = `${r[0]} — ${r[1]} x ${r[2]} = ${r[3]}`;
+    doc.text(line, 14, y);
+    y += 6;
+    if (y > 270) {
+      doc.addPage();
+      y = 20;
+    }
+  });
+  yAfter = y + 6;
+}
+
+// Totales
+doc.setFontSize(12);
+const pageWidth = doc.internal.pageSize.getWidth();
+const rightX = pageWidth - 14; // margen derecho
+
+doc.text(`Subtotal: ${fmt.format(inv.subtotal)}`, rightX, yAfter, { align: "right" });
+doc.text(`IVA (13%): ${fmt.format(inv.tax)}`, rightX, yAfter + 6, { align: "right" });
+doc.setFont(undefined, "bold");
+doc.text(`Total: ${fmt.format(inv.total)}`, rightX, yAfter + 12, { align: "right" });
+doc.setFont(undefined, "normal");
+
+// Guardar
+const fechaNombre = (inv.when || new Date().toISOString()).slice(0, 10);
+doc.save(`factura_${fechaNombre}.pdf`);
+
+});
